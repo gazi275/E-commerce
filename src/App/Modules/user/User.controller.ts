@@ -1,3 +1,4 @@
+import { get } from "http";
 import catchAsync from "../../Utils/catchAsync";
 import { sendResponse } from "../../Utils/sendResponse";
 import { UserServices } from "./User.services";
@@ -16,6 +17,30 @@ const createUSer = catchAsync(async (req, res) => {
   });
 });
 
+const getUSerController = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const result = await UserServices.GetUserServices(id);
+  sendResponse(res, {
+    status: 200,
+    success: true,
+    message: "User fetched successfully",
+    data: result,
+  });
+});
+
+const getAllUserController = catchAsync(async (req, res) => {
+    const result = await UserServices.AllUserServices();
+    sendResponse(res, {
+        status: 200,
+        success: true,
+        message: "All user fetched successfully",
+        data: result,
+    });
+  
+});
+
 export const UserController = {
   createUSer,
+  getUSerController,
+  getAllUserController
 };
