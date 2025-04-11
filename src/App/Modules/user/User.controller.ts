@@ -3,10 +3,11 @@ import catchAsync from "../../Utils/catchAsync";
 import { sendResponse } from "../../Utils/sendResponse";
 import { UserServices } from "./User.services";
 import { userSchema } from "./User.validation";
+import { IUSer } from "./User.schema";
 
 const createUSer = catchAsync(async (req, res) => {
   const user = req.body;
-  const parseUser = userSchema.parse(user);
+  const parseUser = userSchema.parse(user) as IUSer;
   const result = await UserServices.CreatUserServices(parseUser);
 
   sendResponse(res, {

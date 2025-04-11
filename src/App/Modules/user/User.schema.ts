@@ -1,11 +1,11 @@
-export type IUSer ={
+export interface IUSer {
     name:string;
     email:string;
     password:string;
     role:"admin" | "user" | "seller" ;
-    contact?:string;
-    address?:string;
+    contact:string;
+    address:string;
     isDeleted: boolean;
-    isVerified: boolean;
+    isVerified: boolean
 
 }
