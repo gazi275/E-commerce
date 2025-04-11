@@ -2,6 +2,10 @@ import { UserModel } from "./User.model";
 import { IUSer } from "./User.schema";
 
 const CreatUserServices = async (data: IUSer) => {
+  const user = await UserModel.findOne({ email: data.email });
+  if (user) {
+    throw new Error("User already exists");
+  }
   const result = await UserModel.create(data);
   return result;
 };

@@ -1,4 +1,7 @@
 import { model, Schema } from "mongoose";
+import bcrypt from "bcrypt";
+import config from "../../config";
+import { IUSer, IUserModel } from "./User.schema";
 
 export const  UserSchema = new Schema({
     name: {
@@ -40,4 +43,33 @@ export const  UserSchema = new Schema({
 }
 )
 
-export const UserModel = model("User", UserSchema);
+UserSchema.pre("save",async function (next){
+    const user = this;
+    if(!user.isModified("password")){
+        return next();
+    }
+    
+    user.password = await bcrypt.hash(user.password,Number(config.bcryptSalt));
+    next();
+})
+
+UserSchema.post("save", function (doc, next) {
+    doc.password="*********";
+    next();
+  });
+
+UserSchema.static("isUserExistByCustomId", async function (id: string) {
+    return await this.findOne({ _id: id, isDeleted: false });
+  });
+
+UserSchema.static("isPasswordMatched", async function (password: string, hashPassword: string) {
+    return await bcrypt.compare(password, hashPassword);
+    }  
+);
+UserSchema.static("isUserExistByEmail", async function (email: string) {
+    return await this.findOne({ email, isDeleted: false });
+});
+
+
+
+export const UserModel = model<IUSer, IUserModel>("User", UserSchema);
