@@ -6,7 +6,7 @@ export interface IUSer {
     password:string;
     role:"admin" | "user" | "seller" ;
     contact:string;
-    address:string;
+    address:string; 
     isDeleted: boolean;
     isVerified: boolean
 

@@ -1,9 +1,10 @@
-import { get } from "http";
+
 import catchAsync from "../../Utils/catchAsync";
 import { sendResponse } from "../../Utils/sendResponse";
 import { UserServices } from "./User.services";
-import { userSchema } from "./User.validation";
+import { userSchema, UserUpdatedSchema } from "./User.validation";
 import { IUSer } from "./User.schema";
+import { AuthenticatedRequest } from './../../middleware/authenticateRequest';
 
 const createUSer = catchAsync(async (req, res) => {
   const user = req.body;
@@ -18,8 +19,10 @@ const createUSer = catchAsync(async (req, res) => {
   });
 });
 
-const getUSerController = catchAsync(async (req, res) => {
-  const { id } = req.params;
+const getUSerController = catchAsync(async (req:AuthenticatedRequest, res) => {
+ 
+  const  id  = req?.user?.id 
+  
   const result = await UserServices.GetUserServices(id);
   sendResponse(res, {
     status: 200,
@@ -40,8 +43,24 @@ const getAllUserController = catchAsync(async (req, res) => {
   
 });
 
+const updateUser= catchAsync(async (req:AuthenticatedRequest, res) => {
+  const  id  = req?.user?.id 
+  const user = req.body;
+  const parseUser = UserUpdatedSchema.parse(user) ;
+  const result = await UserServices.updateProfileService(id, parseUser);
+
+  sendResponse(res, {
+    status: 200,
+    success: true,
+    message: "User updated successfully",
+    data: result,
+  });
+}
+);
+
 export const UserController = {
   createUSer,
   getUSerController,
-  getAllUserController
+  getAllUserController,
+  updateUser
 };

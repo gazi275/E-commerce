@@ -14,3 +14,9 @@ export const userSchema = z.object({
   isDeleted: z.boolean().default(false),
   isVerified: z.boolean().default(false),
 });
+
+export const UserUpdatedSchema = z.object({
+  name: z.string().optional(),
+  contact: z.string().optional(),
+  address: z.string().optional(),
+});
