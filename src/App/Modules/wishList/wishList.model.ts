@@ -1,7 +1,6 @@
 import { Schema, model } from "mongoose";
 import { IWishlist } from "./wishList.schema";
 
-
 const wishlistSchema = new Schema<IWishlist>(
   {
     user: { type: Schema.Types.ObjectId, ref: "User", required: true },
@@ -10,7 +9,5 @@ const wishlistSchema = new Schema<IWishlist>(
   },
   { timestamps: true }
 );
-
-wishlistSchema.index({ user: 1, product: 1 }, { unique: true }); 
 
 export const WishlistModel = model<IWishlist>("Wishlist", wishlistSchema);
