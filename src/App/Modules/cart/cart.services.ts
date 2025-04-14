@@ -1,11 +1,33 @@
+
+import { ProductModel } from "../product/product.model";
 import { CartModel } from "./cart.model";
 
 
-const addToCart = async (userId: string, productId: string, quantity = 1) => {
-  const existing = await CartModel.findOne({ user: userId, product: productId });
+const addToCart = async (userId: string, productId: string, quantity:number) => {
+ 
+  const product = await ProductModel.findOne({ _id: productId, isDeleted: false });
 
+  if (!product) {
+    
+    throw new Error("Product not found");
+  }
+    if (product.stock< quantity ){
+         throw new Error("Product out of stock");
+    }
+  
+    const existing = await CartModel.findOne({ user: userId, product: productId });
+
+   
   if (existing) {
-    existing.quantity += quantity;
+   const newQuantity = existing.quantity + quantity;
+    if (newQuantity > product.stock) {
+      throw new Error("Not enough stock available");
+    }
+    existing.price = product.price;
+existing.quantity = newQuantity;
+existing.totalPrice = product.price * newQuantity;
+ existing.addedAt = new Date();
+
     return await existing.save();
   }
 
@@ -13,6 +35,9 @@ const addToCart = async (userId: string, productId: string, quantity = 1) => {
     user: userId,
     product: productId,
     quantity,
+    price: product.price,
+    addedAt: new Date(),
+    totalPrice: product.price * quantity,
   });
 
   return cartItem;
