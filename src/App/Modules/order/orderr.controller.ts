@@ -4,8 +4,8 @@ import catchAsync from "../../Utils/catchAsync";
 import { sendResponse } from "../../Utils/sendResponse";
 import { OrderService } from "./order.service";
 import { AuthenticatedRequest } from "../../middleware/authenticateRequest";
-
 import { orderZodSchema } from "./order.validation";
+import { send } from "process";
 
 const createOrderController = catchAsync(async (req: AuthenticatedRequest, res: Response) => {
   const userId = req.user?.id!;
@@ -35,7 +35,33 @@ const getMyOrdersController = catchAsync(async (req: AuthenticatedRequest, res: 
   });
 });
 
+const cancelOrderController = catchAsync(async (req: AuthenticatedRequest, res: Response) => {
+  const orderId = req.params.id;
+  const order = await OrderService.cencelorder(orderId);
+
+  sendResponse(res, {
+    status: 200,
+    success: true,
+    message: "Order cancelled successfully",
+    data: order,
+  });
+});
+
+const paymentWithCodController = catchAsync(async (req: AuthenticatedRequest, res: Response) => {
+  const orderId = req.params.id;
+  const userId = req.user?.id!;
+  const order = await OrderService.paymentWithCod(orderId, userId);
+  sendResponse(res, {
+    status: 200,
+    success: true,
+    message: "Order paid successfully",
+    data: order,
+  });
+});
+
 export const OrderController = {
   createOrderController,
   getMyOrdersController,
+  cancelOrderController,
+  paymentWithCodController,
 };

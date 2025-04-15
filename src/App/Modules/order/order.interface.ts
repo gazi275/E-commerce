@@ -18,4 +18,8 @@ export interface IOrder {
   };
   status?: "pending" | "confirmed" | "shipped" | "delivered" | "cancelled";
   paymentStatus?: "unpaid" | "paid";
+  isDeleted?: boolean;
+  paymentMethod: "cod" | "stripe" | "bkash";
+  paidAt?: Date;
+  
 }
