@@ -10,7 +10,7 @@ const cartSchema = new Schema<ICart>(
     addedAt: { type: Date, default: Date.now },
     totalPrice: { type: Number, required: true },
     isDeleted: { type: Boolean, default: false },
-},
+  },
   {
     timestamps: true,
   }

@@ -21,5 +21,4 @@ export interface IOrder {
   isDeleted?: boolean;
   paymentMethod: "cod" | "stripe" | "bkash";
   paidAt?: Date;
-  
 }

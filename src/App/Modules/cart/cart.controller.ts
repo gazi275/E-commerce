@@ -8,9 +8,12 @@ import { addToCartSchema } from "./cart.validation";
 const addToCart = catchAsync(async (req: AuthenticatedRequest, res) => {
   const userId = req.user?.id!;
   const parsed = addToCartSchema.parse(req.body);
-  
 
-  const result = await CartService.addToCart(userId, parsed.product, parsed.quantity ?? 1);
+  const result = await CartService.addToCart(
+    userId,
+    parsed.product,
+    parsed.quantity ?? 1
+  );
   sendResponse(res, {
     status: 200,
     success: true,

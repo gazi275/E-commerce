@@ -8,7 +8,7 @@ export const productZodSchema = z.object({
   stock: z.number().optional(),
   images: z.array(z.string()).optional(),
   brand: z.string().optional(),
-   // Assuming seller is a string (e.g., user ID)
+  // Assuming seller is a string (e.g., user ID)
 });
 
 export const updateproductSchema = productZodSchema.partial().extend({

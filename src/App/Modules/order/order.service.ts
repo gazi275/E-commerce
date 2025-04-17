@@ -14,7 +14,6 @@ const createOrder = async (userId: string, shippingAddress: string) => {
       product: item.product._id,
       quantity: item.quantity,
       price: item.price,
-      
     };
   });
 
@@ -27,41 +26,55 @@ const createOrder = async (userId: string, shippingAddress: string) => {
     paymentStatus: "unpaid",
   });
 
-
-   await CartModel.deleteMany({ user: userId });
+  await CartModel.deleteMany({ user: userId });
 
   return order;
 };
 
 const getOrdersByUser = async (userId: string) => {
-  return OrderModel.find({ user: userId, isDeleted: false }).populate("products.product");
+  return OrderModel.find({ user: userId, isDeleted: false }).populate(
+    "products.product"
+  );
 };
 
 const cencelorder = async (orderId: string) => {
   const order = await OrderModel.findById(orderId);
   if (!order) throw new Error("Order not found");
-  if (order.status === "delivered"|| order.status === "cancelled" || order.status ==="shipped") throw new Error("Order cannot be cancelled");
+  if (
+    order.status === "delivered" ||
+    order.status === "cancelled" ||
+    order.status === "shipped"
+  )
+    throw new Error("Order cannot be cancelled");
 
-  for(const item of order.products){
-    await  ProductModel.findByIdAndUpdate(item.product,{$inc:{stock:item.quantity}})
+  for (const item of order.products) {
+    await ProductModel.findByIdAndUpdate(item.product, {
+      $inc: { stock: item.quantity },
+    });
   }
   order.status = "cancelled";
   await order.save();
   return order;
+};
 
-}
+const paymentWithCod = async (
+  orderId: string,
+  userId: string,
+  method = "cod"
+) => {
+  const updatedOrder = await OrderModel.findOneAndUpdate(
+    { _id: orderId, user: userId },
+    { status: "confirmed", paymentStatus: "paid",paymentMethod:method, paidAt: new Date() },
+    { new: true }
+  );
 
-const paymentWithCod = async (orderId: string,userId:string) => {
-  const order= await OrderModel.findOne({_id:orderId, user:userId});
-  if (!order) throw new Error("Order not found");
-  if (order.paymentStatus === "paid") throw new Error("Order already paid");
-  order.paymentStatus = "paid";
-  order.paidAt = new Date();
-  order.status = "confirmed";
-   return await order.save();
-}
+  if (!updatedOrder) {
+    throw new Error("Order not found or update failed");
+  }
 
-
+  console.log("✅ Order updated in DB:", updatedOrder);
+  return updatedOrder;
+};
 
 export const OrderService = {
   createOrder,

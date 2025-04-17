@@ -12,22 +12,25 @@ const CreatUserServices = async (data: IUSer) => {
 
 const AllUserServices = async () => {
   const result = await UserModel.find({ isDeleted: false }).lean();
-    return result;
-}
+  return result;
+};
 
 const GetUserServices = async (id: string) => {
-  const result = await UserModel.findOne({ _id: id ,isDeleted:false}).select("-password");
+  const result = await UserModel.findOne({ _id: id, isDeleted: false }).select(
+    "-password"
+  );
   console.log(result);
   return result;
 };
 
-const updateProfileService = async (userId: string, payload: Partial<IUSer>) => {
+const updateProfileService = async (
+  userId: string,
+  payload: Partial<IUSer>
+) => {
   const user = await UserModel.findById(userId);
   if (!user || user.isDeleted) {
     throw new Error("User not found");
   }
-
-
 
   const updatedUser = await UserModel.findByIdAndUpdate(userId, payload, {
     new: true,
@@ -36,7 +39,6 @@ const updateProfileService = async (userId: string, payload: Partial<IUSer>) => 
 
   return updatedUser;
 };
-
 
 export const UserServices = {
   CreatUserServices,

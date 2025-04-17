@@ -7,7 +7,7 @@ interface Tresponse<T> {
   data: T;
 }
 
- export const sendResponse = <T>(res: Response, data: Tresponse<T>) => {
+export const sendResponse = <T>(res: Response, data: Tresponse<T>) => {
   return res.status(data.status).json({
     success: data.success,
     message: data.message,

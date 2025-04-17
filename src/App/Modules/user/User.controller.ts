@@ -1,10 +1,9 @@
-
 import catchAsync from "../../Utils/catchAsync";
 import { sendResponse } from "../../Utils/sendResponse";
 import { UserServices } from "./User.services";
 import { userSchema, UserUpdatedSchema } from "./User.validation";
 import { IUSer } from "./User.schema";
-import { AuthenticatedRequest } from './../../middleware/authenticateRequest';
+import { AuthenticatedRequest } from "./../../middleware/authenticateRequest";
 
 const createUSer = catchAsync(async (req, res) => {
   const user = req.body;
@@ -19,10 +18,9 @@ const createUSer = catchAsync(async (req, res) => {
   });
 });
 
-const getUSerController = catchAsync(async (req:AuthenticatedRequest, res) => {
- 
-  const  id  = req?.user?.id 
-  
+const getUSerController = catchAsync(async (req: AuthenticatedRequest, res) => {
+  const id = req?.user?.id;
+
   const result = await UserServices.GetUserServices(id);
   sendResponse(res, {
     status: 200,
@@ -33,20 +31,19 @@ const getUSerController = catchAsync(async (req:AuthenticatedRequest, res) => {
 });
 
 const getAllUserController = catchAsync(async (req, res) => {
-    const result = await UserServices.AllUserServices();
-    sendResponse(res, {
-        status: 200,
-        success: true,
-        message: "All user fetched successfully",
-        data: result,
-    });
-  
+  const result = await UserServices.AllUserServices();
+  sendResponse(res, {
+    status: 200,
+    success: true,
+    message: "All user fetched successfully",
+    data: result,
+  });
 });
 
-const updateUser= catchAsync(async (req:AuthenticatedRequest, res) => {
-  const  id  = req?.user?.id 
+const updateUser = catchAsync(async (req: AuthenticatedRequest, res) => {
+  const id = req?.user?.id;
   const user = req.body;
-  const parseUser = UserUpdatedSchema.parse(user) ;
+  const parseUser = UserUpdatedSchema.parse(user);
   const result = await UserServices.updateProfileService(id, parseUser);
 
   sendResponse(res, {
@@ -55,12 +52,11 @@ const updateUser= catchAsync(async (req:AuthenticatedRequest, res) => {
     message: "User updated successfully",
     data: result,
   });
-}
-);
+});
 
 export const UserController = {
   createUSer,
   getUSerController,
   getAllUserController,
-  updateUser
+  updateUser,
 };

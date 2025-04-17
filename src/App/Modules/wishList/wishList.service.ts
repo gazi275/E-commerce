@@ -1,20 +1,15 @@
-
 import { Types } from "mongoose";
 import { WishlistModel } from "./wishList.model";
 
-
 const addToWishlist = async (userId: string, productId: string) => {
-   
+  const existingWishlistItem = await WishlistModel.findOne({
+    user: userId,
+    product: productId,
+  });
+  if (existingWishlistItem) {
+    throw new Error("Product already in wishlist");
+  }
 
-    const existingWishlistItem = await WishlistModel.findOne({
-        user: userId,
-        product: productId,
-    });
-    if (existingWishlistItem) {
-        throw new Error("Product already in wishlist");
-    }
-
-    
   const wishlistItem = await WishlistModel.create({
     user: new Types.ObjectId(userId),
     product: new Types.ObjectId(productId),
@@ -36,11 +31,10 @@ const removeFromWishlist = async (userId: string, productId: string) => {
 };
 
 const getUserWishlist = async (userId: string) => {
-  const wishlist = await WishlistModel.find({ user: userId })
-    .populate({
-      path: "product",
-      match: { isDeleted: false }, 
-    });
+  const wishlist = await WishlistModel.find({ user: userId }).populate({
+    path: "product",
+    match: { isDeleted: false },
+  });
 
   return wishlist;
 };

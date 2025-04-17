@@ -4,11 +4,12 @@ import jwt, { JwtPayload } from "jsonwebtoken";
 import { AuthenticatedRequest } from "./authenticateRequest";
 import config from "../config";
 
-
-
-
 export const auth = (roles: string[]) => {
-  return (req: AuthenticatedRequest, res: Response, next: NextFunction): void => {
+  return (
+    req: AuthenticatedRequest,
+    res: Response,
+    next: NextFunction
+  ): void => {
     try {
       const token = req.headers.authorization?.split(" ")[1];
 
@@ -17,10 +18,15 @@ export const auth = (roles: string[]) => {
         return;
       }
 
-      const decoded = jwt.verify(token, config.JWT_SECRET as string) as JwtPayload;
+      const decoded = jwt.verify(
+        token,
+        config.JWT_SECRET as string
+      ) as JwtPayload;
 
       if (!roles.includes(decoded.role)) {
-        res.status(403).json({ message: `Forbidden: Only ${roles.join(" or ")} allowed` });
+        res
+          .status(403)
+          .json({ message: `Forbidden: Only ${roles.join(" or ")} allowed` });
         return;
       }
 
