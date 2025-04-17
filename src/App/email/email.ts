@@ -20,7 +20,7 @@ export const sendEmail = async ({
       port: 587,
       secure: false,
       auth: {
-        user: "gaziazad270@gmail.com",
+        user: config.MAIL_USER,
         pass: config.MAIL_PASS,
       },
     });
