@@ -4,14 +4,14 @@ import { auth } from "../../middleware/auth";
 const router = Router();
 router.post(
   "/product",
-  auth(["seller"]),
+  auth(["seller","admin"]),
   ProductController.creatproductController
 );
 router.get("/products", ProductController.getAllProductsController);
 router.get("/product/:id", ProductController.getSingleProductController);
 router.patch(
   "/product/:id",
-  auth(["seller"]),
+  auth(["seller","admin"]),
   ProductController.updateProductController
 );
 router.delete(

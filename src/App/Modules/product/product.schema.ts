@@ -11,3 +11,14 @@ export interface productSchema {
   seller: Types.ObjectId;
   isDeleted: boolean;
 }
+export interface IQueryParams {
+  searchTerm?: string;
+  category?: string;
+  brand?: string;
+  minPrice?: number;
+  maxPrice?: number;
+  page?: number;
+  limit?: number;
+  sortBy?: string;
+  sortOrder?: "asc" | "desc";
+}

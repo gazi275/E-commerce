@@ -8,6 +8,7 @@ import { productZodSchema, updateproductSchema } from "./product.validation";
 const creatproductController = catchAsync(
   async (req: AuthenticatedRequest, res) => {
     const product = req.body;
+    
     const parseProduct = productZodSchema.parse(product);
 
     // Add missing properties to match productSchema
@@ -28,12 +29,12 @@ const creatproductController = catchAsync(
 );
 
 const getAllProductsController = catchAsync(async (req, res) => {
-  const result = await ProductService.getAllProducts();
+  const result = await ProductService.getAllProducts(req.query);
   sendResponse(res, {
     status: 200,
     success: true,
     message: "Products retrieved successfully",
-    data: result,
+    ...result
   });
 });
 

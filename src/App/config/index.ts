@@ -13,7 +13,7 @@ export default {
   Stripe_Secret_Key: process.env.STRIPE_SECRET_KEY,
   CLIENT_URL: process.env.CLIENT_URL,
   WEBHOOK_SECRET: process.env.WEBHOOK_SECRET,
-  MAIL_USER: process.env.MAIL_USER,
+  MAIL_USER: process.env.EMAIL_USER,
   MAIL_PASS: process.env.EMAIL_PASS,
   NODE_ENV: process.env.NODE_ENV,
 };

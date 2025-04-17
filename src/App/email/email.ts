@@ -10,6 +10,7 @@ export const sendEmail = async ({
   subject: string;
   text: string;
 }) => {
+  console.log(config.MAIL_USER, config.MAIL_PASS);
   try {
   
 
