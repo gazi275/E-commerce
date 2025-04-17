@@ -19,6 +19,7 @@ export const handleStripeWebhook = async (req: Request, res: Response): Promise<
   try {
     const rawBody = req.body;
     event = stripe.webhooks.constructEvent(rawBody, sig as string, webhookSecret);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
     console.error("❌ Webhook signature error:", err.message);
     res.status(400).send(`Webhook Error: ${err.message}`);

@@ -29,6 +29,7 @@ export const getAllProducts = async (query: IQueryParams) => {
     sortOrder = "desc",
   } = query;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const filters: any = { isDeleted: false };
 
   // 🔍 Search by title
@@ -61,6 +62,7 @@ export const getAllProducts = async (query: IQueryParams) => {
   const skip = (Number(page) - 1) * Number(limit);
 
   // ↕️ Sorting
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const sortConditions: any = {};
   if (sortBy) sortConditions[sortBy] = sortOrder === "asc" ? 1 : -1;
 

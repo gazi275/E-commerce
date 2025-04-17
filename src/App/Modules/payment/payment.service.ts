@@ -8,6 +8,7 @@ const createStripeCheckoutSession = async (orderId: string, userId:string) => {
   const order = await OrderModel.findById(orderId).populate("products.product");
   if (!order) throw new Error("Order not found");
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const lineItems = order.products.map((item: any) => ({
     price_data: {
       currency: "usd",
